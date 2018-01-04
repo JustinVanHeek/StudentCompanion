@@ -1,5 +1,8 @@
 package vanheek.justin.dev.studentcompanion.objects;
 
+import android.support.annotation.NonNull;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -8,7 +11,7 @@ import java.util.Date;
  * Created by justi on 2017-12-29.
  */
 
-public class Semester {
+public class Semester implements Comparable, Serializable {
 
     private String name = "";
     private Calendar start;
@@ -76,5 +79,17 @@ public class Semester {
 
     public void removeCourse(Course course) {
         courses.remove(course);
+    }
+
+    @Override
+    public int compareTo(@NonNull Object o) {
+        Semester a = (Semester) o;
+        if(start == null) {
+            return -1;
+        }
+        if(a.getStart() == null) {
+            return 1;
+        }
+        return start.compareTo(a.getStart());
     }
 }

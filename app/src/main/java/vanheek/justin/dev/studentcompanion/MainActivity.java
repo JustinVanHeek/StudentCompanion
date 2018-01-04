@@ -1,9 +1,11 @@
 package vanheek.justin.dev.studentcompanion;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,58 +16,44 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
+
 import java.util.Calendar;
 import java.util.Date;
 
 import vanheek.justin.dev.studentcompanion.objects.Assignment;
 import vanheek.justin.dev.studentcompanion.objects.Course;
 import vanheek.justin.dev.studentcompanion.objects.Exam;
+import vanheek.justin.dev.studentcompanion.objects.Milestone;
 import vanheek.justin.dev.studentcompanion.objects.Semester;
+import vanheek.justin.dev.studentcompanion.objects.WeeklySchedule;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public Semester[] semesters;
     public int currentSemester;
+    public ColorPicker cp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //TESTING PURPOSES ONLY
-        Semester semester = new Semester("Test Semester",Calendar.getInstance(),Calendar.getInstance());
-        Course testCourse = new Course("Test Course", Color.CYAN, semester);
-        Assignment a = new Assignment();
-        a.setName("Test Assignment");
-        a.setPercentOfGrade(80);
-        a.setCourse(testCourse);
-        a.setDue(Calendar.getInstance());
-        testCourse.addAssignment(a);
-        Exam e = new Exam();
-        e.setName("Test Exam");
-        e.setPercentOfGrade(20);
-        e.setCourse(testCourse);
-        e.setDate(Calendar.getInstance());
-        testCourse.addExam(e);
-        semester.addCourse(testCourse);
-        semesters = new Semester[1];
-        semesters[0] = semester;
-        currentSemester = 0;
+        //Testing purposes
+        boolean cleanStart = false;
+        if(cleanStart) {
+            Semester s = new Semester("Clean Slate", Calendar.getInstance(), Calendar.getInstance());
+            semesters = new Semester[]{s};
+            DataManager.saveData(this);
+        }
 
+        //Load the app's data from previous uses
+        DataManager.loadData(this);
 
-
+        //Default code
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -75,6 +63,14 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //Initialize Color Picker
+        cp = new ColorPicker(MainActivity.this, 0, 0, 255);
+
+        //Display home fragment
+        android.app.FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, new HomeFragment()).commit();
+
     }
 
     @Override

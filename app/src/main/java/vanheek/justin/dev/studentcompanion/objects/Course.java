@@ -2,14 +2,17 @@ package vanheek.justin.dev.studentcompanion.objects;
 
 import android.graphics.Color;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+
+import vanheek.justin.dev.studentcompanion.Util;
 
 /**
  * Created by justi on 2017-12-29.
  */
 
-public class Course {
+public class Course implements Serializable{
 
     private int color = Color.WHITE;
     private String name = "";
@@ -159,11 +162,31 @@ public class Course {
         return assArray;
     }
 
+    //Add assignment by date
     public void addAssignment(Assignment a) {
+        for(int i = 0; i < assignments.size(); i++) {
+            if(a.compareTo(assignments.get(i)) <= 0) {
+                new Util<Assignment>().insertInto(assignments,i,a);
+                return;
+            }
+        }
         assignments.add(a);
     }
 
     public void addExam(Exam exam) {
+        for(int i = 0; i < exams.size(); i++) {
+            if(exam.compareTo(exams.get(i)) <= 0) {
+                new Util<Exam>().insertInto(exams,i,exam);
+                return;
+            }
+        }
         exams.add(exam);
+    }
+
+    public void removeAssignment(Assignment assignment) {
+        assignments.remove(assignment);
+    }
+    public void removeExam(Exam exam) {
+        exams.remove(exam);
     }
 }

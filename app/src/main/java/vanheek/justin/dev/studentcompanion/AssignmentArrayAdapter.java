@@ -1,6 +1,7 @@
 package vanheek.justin.dev.studentcompanion;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,30 +39,39 @@ public class AssignmentArrayAdapter extends ArrayAdapter<Assignment> {
         Assignment assignment = values[position];
 
         ((TextView) rowView.findViewById(R.id.assignmentName)).setText(assignment.getName());
+        rowView.findViewById(R.id.assignmentContainer).setBackgroundColor(assignment.getCourse().getColor());
 
-        String dueTimeText = "DUE";
-        Calendar time = Calendar.getInstance();
-        Calendar due = assignment.getDue();
-        int start = time.get(Calendar.DAY_OF_YEAR);
-        int end = due.get(Calendar.DAY_OF_YEAR);
-        int dueIn = end-start;
-        dueIn = dueIn + 365 * (due.get(Calendar.YEAR) - time.get(Calendar.YEAR));
+        if(assignment.getDue() != null) {
+            String dueTimeText = "DUE";
+            Calendar time = Calendar.getInstance();
+            Calendar due = assignment.getDue();
+            int start = time.get(Calendar.DAY_OF_YEAR);
+            int end = due.get(Calendar.DAY_OF_YEAR);
+            int dueIn = end - start;
+            dueIn = dueIn + 365 * (due.get(Calendar.YEAR) - time.get(Calendar.YEAR));
 
 
-        if (dueIn < 0) {
-            dueTimeText = "Due " + Math.abs(dueIn) + " days ago";
+            if (dueIn < 0) {
+                dueTimeText = "Due " + Math.abs(dueIn) + " days ago";
+            } else if (dueIn == 0) {
+                dueTimeText = "Due today";
+            } else if (dueIn == 1) {
+                dueTimeText = "Due tomorrow";
+            } else if (dueIn > 1) {
+                dueTimeText = "Due in " + dueIn + " days";
+            }
+
+            Log.d("DueDateCalc",position+ " " + start + " " + end + " " + dueIn);
+
+            ((TextView) rowView.findViewById(R.id.assignmentTime)).setText(dueTimeText);
         }
-        else if (dueIn == 0) {
-            dueTimeText = "Due today";
-        }
-        else if (dueIn == 1) {
-            dueTimeText = "Due tomorrow";
-        }
-        else if (dueIn > 1) {
-            dueTimeText = "Due in " + dueIn + "days";
+        else {
+            ((TextView) rowView.findViewById(R.id.assignmentTime)).setText("");
         }
 
-        ((TextView) rowView.findViewById(R.id.assignmentTime)).setText(dueTimeText);
+        if(assignment.isComplete()) {
+            rowView.setVisibility(View.GONE);
+        }
 
         return rowView;
     }

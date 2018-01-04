@@ -1,10 +1,13 @@
 package vanheek.justin.dev.studentcompanion;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Gravity;
@@ -20,6 +23,9 @@ import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
+import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
+import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
 
 import java.util.Calendar;
 
@@ -38,6 +44,7 @@ public class EditCourseFragment extends Fragment {
     private Course course;
     private WeeklySchedule courseSchedule = new WeeklySchedule();
     private WeeklySchedule officeSchedule = new WeeklySchedule();
+    private int chosenColor = Color.BLUE;
 
     @Nullable
     @Override
@@ -62,7 +69,9 @@ public class EditCourseFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.content_frame, new CoursesFragment()).commit();
+                CourseDetailsFragment frag = new CourseDetailsFragment();
+                frag.setCourse(course);
+                fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();
             }
 
         });
@@ -71,6 +80,18 @@ public class EditCourseFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 updateCourse();
+                FragmentManager fragmentManager = getFragmentManager();
+                CourseDetailsFragment frag = new CourseDetailsFragment();
+                frag.setCourse(course);
+                fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();
+            }
+
+        });
+        myView.findViewById(R.id.deleteButton).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                delete();
                 FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.content_frame, new CoursesFragment()).commit();
             }
@@ -98,7 +119,16 @@ public class EditCourseFragment extends Fragment {
         //Fill form
         fillCourseForm();
 
+        changeColor();
+
         return myView;
+    }
+
+    private void delete() {
+        course.getSemester().removeCourse(course);
+
+        //Save changes to storage
+        DataManager.saveData((MainActivity) getActivity());
     }
 
     private String[] getStringArrayOfSemesters() {
@@ -108,6 +138,32 @@ public class EditCourseFragment extends Fragment {
             result[i] = semesters[i].getName();
         }
         return result;
+    }
+
+    private void changeColor() {
+        final ColorPicker cp = ((MainActivity) getActivity()).cp;
+        //Change color
+        myView.findViewById(R.id.editColor).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                /* Show color picker dialog */
+                cp.show();
+
+    /* Set a new Listener called when user click "select" */
+                cp.setCallback(new ColorPickerCallback() {
+                    @Override
+                    public void onColorChosen(@ColorInt int color) {
+                        chosenColor = color;
+                        myView.findViewById(R.id.editColor).setBackgroundColor(color);
+                    }
+                });
+
+            }
+
+        });
+        ((MainActivity)getActivity()).findViewById(R.id.toolbar).setBackgroundColor(chosenColor);
     }
 
     private void popup(LayoutInflater inflater, final WeeklySchedule schedule, final int displayText) {
@@ -210,17 +266,20 @@ public class EditCourseFragment extends Fragment {
     private void updateCourse() {
         if(course == null) {
             course = new Course();
-            ((MainActivity) getActivity()).semesters[((Spinner)myView.findViewById(R.id.editSemester)).getSelectedItemPosition()].addCourse(course);
+
         }
         else {
             //Check if semester changed
             if(((Spinner)myView.findViewById(R.id.editSemester)).getSelectedItemPosition() != new Util<Semester>().find(course.getSemester(), ((MainActivity) getActivity()).semesters)) {
                 course.getSemester().removeCourse(course);
-                ((MainActivity) getActivity()).semesters[((Spinner)myView.findViewById(R.id.editSemester)).getSelectedItemPosition()].addCourse(course);
             }
         }
+        //Set the semester
+        ((MainActivity) getActivity()).semesters[((Spinner)myView.findViewById(R.id.editSemester)).getSelectedItemPosition()].addCourse(course);
+        course.setSemester(((MainActivity) getActivity()).semesters[((Spinner)myView.findViewById(R.id.editSemester)).getSelectedItemPosition()]);
+
         course.setName(((EditText) myView.findViewById(R.id.editName)).getText().toString());
-        //TODO Color
+        course.setColor(chosenColor);
         course.setCourseCode(((EditText) myView.findViewById(R.id.editCode)).getText().toString());
         try {
             course.setCredits(Integer.parseInt(((EditText) myView.findViewById(R.id.editCredits)).getText().toString()));
@@ -236,6 +295,8 @@ public class EditCourseFragment extends Fragment {
         //TODO Course Evaluation
         course.setNotes(((EditText) myView.findViewById(R.id.editNotes)).getText().toString());
 
+        //Save changes to storage
+        DataManager.saveData((MainActivity) getActivity());
     }
 
     private void fillCourseForm() {
@@ -245,15 +306,28 @@ public class EditCourseFragment extends Fragment {
         if(course != null) {
 
             ((Spinner) myView.findViewById(R.id.editSemester)).setSelection(new Util<Semester>().find(course.getSemester(), ((MainActivity) getActivity()).semesters));
-            //TODO Color
+            chosenColor = course.getColor();
+            myView.findViewById(R.id.editColor).setBackgroundColor(chosenColor);
             ((EditText) myView.findViewById(R.id.editName)).setText(course.getName());
             ((EditText) myView.findViewById(R.id.editCode)).setText(course.getCourseCode());
             ((EditText) myView.findViewById(R.id.editCredits)).setText(""+course.getCredits());
             ((EditText) myView.findViewById(R.id.editRoom)).setText(course.getRoom());
-            //TODO Schedule
+            courseSchedule = course.getCourseHours();
+            if (courseSchedule != null) {
+                ((EditText) myView.findViewById(R.id.editSchedule)).setText(courseSchedule.toString());
+            }
+            else {
+                courseSchedule = new WeeklySchedule();
+            }
             ((EditText) myView.findViewById(R.id.editProfessor)).setText(course.getProf());
             ((EditText) myView.findViewById(R.id.editOffice)).setText(course.getOffice());
-            //TODO Office Hours
+            officeSchedule = course.getOfficeHours();
+            if (officeSchedule != null) {
+                ((EditText) myView.findViewById(R.id.editOfficeHours)).setText(officeSchedule.toString());
+            }
+            else {
+                officeSchedule = new WeeklySchedule();
+            }
             createCourseEvalList(course);
             ((EditText) myView.findViewById(R.id.editNotes)).setText(course.getNotes());
         }

@@ -1,8 +1,6 @@
 package vanheek.justin.dev.studentcompanion;
 
-import android.app.FragmentManager;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +14,12 @@ import vanheek.justin.dev.studentcompanion.objects.Course;
  * Created by justi on 2017-12-29.
  */
 
-public class CourseEvalArrayAdapter extends ArrayAdapter<Assignment>{
+public class HomeAssignmentArrayAdapter extends ArrayAdapter<Assignment> {
 
     private final Context context;
     private final Assignment[] values;
 
-    public CourseEvalArrayAdapter(Context context, Assignment[] values) {
+    public HomeAssignmentArrayAdapter(Context context, Assignment[] values) {
         super(context, -1, values);
         this.context = context;
         this.values = values;
@@ -32,19 +30,13 @@ public class CourseEvalArrayAdapter extends ArrayAdapter<Assignment>{
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        final View rowView = inflater.inflate(R.layout.course_eval_row, parent, false);
-
+        View rowView = inflater.inflate(R.layout.home_row, parent, false);
 
         Assignment assignment = values[position];
 
-        ((TextView) rowView.findViewById(R.id.assignmentName)).setText(assignment.getName());
-        if(assignment.getGrade() < 0) {
-            ((TextView) rowView.findViewById(R.id.mark)).setText("--");
-        }
-        else {
-            ((TextView) rowView.findViewById(R.id.mark)).setText(assignment.getGrade() + "%");
-        }
-        ((TextView) rowView.findViewById(R.id.percentOfGrade)).setText(assignment.getPercentOfGrade()+"%");
+        rowView.findViewById(R.id.container).setBackgroundColor(assignment.getCourse().getColor());
+
+        ((TextView) rowView.findViewById(R.id.itemName)).setText(assignment.getName());
 
         return rowView;
     }

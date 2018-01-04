@@ -56,6 +56,16 @@ public class EditSemesterFragment extends Fragment {
             }
 
         });
+        myView.findViewById(R.id.deleteButton).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                delete();
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.content_frame, new SemesterFragment()).commit();
+            }
+
+        });
 
         //Popups for date pickers
         myView.findViewById(R.id.editStart).setOnClickListener(new View.OnClickListener() {
@@ -74,11 +84,12 @@ public class EditSemesterFragment extends Fragment {
                     public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
                         // TODO Auto-generated method stub
                     /*      Your code   to get date and time    */
+                        start = Calendar.getInstance();
+                        start.set(selectedyear,selectedmonth,selectedday);
                         selectedmonth = selectedmonth + 1;
                         ((EditText)myView.findViewById(R.id.editStart)).setText("" + selectedday + "/" + selectedmonth + "/" + selectedyear);
 
-                        start = Calendar.getInstance();
-                        start.set(selectedyear,selectedmonth,selectedday);
+
                     }
                 }, mYear, mMonth, mDay);
                 mDatePicker.setTitle("Select Date");
@@ -101,11 +112,12 @@ public class EditSemesterFragment extends Fragment {
                     public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
                         // TODO Auto-generated method stub
                     /*      Your code   to get date and time    */
+                        end = Calendar.getInstance();
+                        end.set(selectedyear,selectedmonth,selectedday);
                         selectedmonth = selectedmonth + 1;
                         ((EditText)myView.findViewById(R.id.editEnd)).setText("" + selectedday + "/" + selectedmonth + "/" + selectedyear);
 
-                        end = Calendar.getInstance();
-                        end.set(selectedyear,selectedmonth,selectedday);
+
                     }
                 }, mYear, mMonth, mDay);
                 mDatePicker.setTitle("Select Date");
@@ -119,6 +131,33 @@ public class EditSemesterFragment extends Fragment {
         return myView;
     }
 
+    private void delete() {
+        Semester[] semesters = ((MainActivity) getActivity()).semesters;
+        Semester[] temp = new Semester[semesters.length-1];
+        if(semesters.length == 1) {
+            Semester[] defaultSem = {new Semester("Default Semester", Calendar.getInstance(), Calendar.getInstance())};
+            ((MainActivity) getActivity()).semesters = defaultSem;
+            return;
+        }
+        boolean shift = false;
+        for(int i = 0; i < semesters.length; i++) {
+            if(shift) {
+                temp[i-1] = semesters[i];
+            }
+            else {
+                temp[i] = semesters[i];
+            }
+            if(semesters[i] == semester) {
+                shift = true;
+            }
+        }
+        ((MainActivity) getActivity()).semesters = temp;
+
+
+        //Save changes to storage
+        DataManager.saveData((MainActivity) getActivity());
+    }
+
     private void updateAssignment() {
         if(semester == null) {
             semester = new Semester();
@@ -128,6 +167,9 @@ public class EditSemesterFragment extends Fragment {
         semester.setName(((EditText) myView.findViewById(R.id.editName)).getText().toString());
         semester.setStart(start);
         semester.setEnd(end);
+
+        //Save changes to storage
+        DataManager.saveData((MainActivity) getActivity());
 
     }
 

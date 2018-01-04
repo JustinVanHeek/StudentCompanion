@@ -37,30 +37,35 @@ public class ExamArrayAdapter extends ArrayAdapter<Exam> {
         Exam assignment = values[position];
 
         ((TextView) rowView.findViewById(R.id.assignmentName)).setText(assignment.getName());
+        rowView.findViewById(R.id.assignmentContainer).setBackgroundColor(assignment.getCourse().getColor());
+        if(assignment.getDate() != null) {
+            String dueTimeText = "DUE";
+            Calendar time = Calendar.getInstance();
+            Calendar due = assignment.getDate();
+            int start = time.get(Calendar.DAY_OF_YEAR);
+            int end = due.get(Calendar.DAY_OF_YEAR);
+            int dueIn = end - start;
+            dueIn = dueIn + 365 * (due.get(Calendar.YEAR) - time.get(Calendar.YEAR));
 
-        String dueTimeText = "DUE";
-        Calendar time = Calendar.getInstance();
-        Calendar due = assignment.getDate();
-        int start = time.get(Calendar.DAY_OF_YEAR);
-        int end = due.get(Calendar.DAY_OF_YEAR);
-        int dueIn = end-start;
-        dueIn = dueIn + 365 * (due.get(Calendar.YEAR) - time.get(Calendar.YEAR));
 
+            if (dueIn < 0) {
+                dueTimeText = "Exam was " + Math.abs(dueIn) + " days ago";
 
-        if (dueIn < 0) {
-            dueTimeText = "Exam was " + Math.abs(dueIn) + " days ago";
-        }
-        else if (dueIn == 0) {
-            dueTimeText = "Exam is today";
-        }
-        else if (dueIn == 1) {
-            dueTimeText = "Exam is tomorrow";
-        }
-        else if (dueIn > 1) {
-            dueTimeText = "Exam is in " + dueIn + "days";
-        }
+                //No longer show exam
+                rowView.setVisibility(View.GONE);
+            } else if (dueIn == 0) {
+                dueTimeText = "Exam is today";
+            } else if (dueIn == 1) {
+                dueTimeText = "Exam is tomorrow";
+            } else if (dueIn > 1) {
+                dueTimeText = "Exam is in " + dueIn + " days";
+            }
 
-        ((TextView) rowView.findViewById(R.id.assignmentTime)).setText(dueTimeText);
+            ((TextView) rowView.findViewById(R.id.assignmentTime)).setText(dueTimeText);
+        }
+        else {
+            ((TextView) rowView.findViewById(R.id.assignmentTime)).setText("");
+        }
 
         return rowView;
     }

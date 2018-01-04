@@ -81,7 +81,7 @@ public class AssignmentFragment extends ListFragment implements AdapterView.OnIt
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Assignment assignment = allAssignments[position];
-        EditAssignmentFragment frag = new EditAssignmentFragment();
+        AssignmentDetailsFragment frag = new AssignmentDetailsFragment();
         frag.setAssignment(assignment);
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();

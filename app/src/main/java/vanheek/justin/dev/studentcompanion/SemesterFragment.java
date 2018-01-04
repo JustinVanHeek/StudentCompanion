@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import vanheek.justin.dev.studentcompanion.objects.Course;
 import vanheek.justin.dev.studentcompanion.objects.Exam;
+import vanheek.justin.dev.studentcompanion.objects.Milestone;
 import vanheek.justin.dev.studentcompanion.objects.Semester;
 
 /**
@@ -55,19 +56,18 @@ public class SemesterFragment extends ListFragment implements AdapterView.OnItem
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        SemesterArrayAdapter adapter = new SemesterArrayAdapter(getActivity(), ((MainActivity) getActivity()).semesters);
+        SemesterArrayAdapter adapter = new SemesterArrayAdapter(getActivity(), ((MainActivity) getActivity()).semesters,this);
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
     }
 
-    //Open the EditCourseFragment with the clicked course
+    //Set this semester as the current semester and return to course list
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Semester semester = ((MainActivity) getActivity()).semesters[position];
-        EditSemesterFragment frag = new EditSemesterFragment();
-        frag.setSemester(semester);
+        ((MainActivity) getActivity()).currentSemester=position;
+
         FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, new CoursesFragment()).commit();
     }
 
     @Override

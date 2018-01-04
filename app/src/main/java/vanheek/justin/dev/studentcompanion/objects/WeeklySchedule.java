@@ -1,10 +1,12 @@
 package vanheek.justin.dev.studentcompanion.objects;
 
+import java.io.Serializable;
+
 /**
  * Created by justi on 2017-12-29.
  */
 
-public class WeeklySchedule {
+public class WeeklySchedule implements Serializable{
 
     public boolean mon;
     public boolean tue;
@@ -15,6 +17,22 @@ public class WeeklySchedule {
     public boolean sun;
     public int start;
     public int end;
+
+    public WeeklySchedule() {
+
+    }
+
+    public WeeklySchedule(boolean m, boolean t, boolean w, boolean th, boolean f, boolean s, boolean su, int st, int en) {
+        mon = m;
+        tue = t;
+        wed = w;
+        thu = th;
+        fri = f;
+        sat = s;
+        sun = su;
+        start = st;
+        end = en;
+    }
 
     public String toString() {
         String result = "";

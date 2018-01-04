@@ -80,7 +80,7 @@ public class ExamFragment extends ListFragment implements AdapterView.OnItemClic
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Exam assignment = allAssignments[position];
-        EditExamFragment frag = new EditExamFragment();
+        ExamDetailsFragment frag = new ExamDetailsFragment();
         frag.setExam(assignment);
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();

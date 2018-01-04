@@ -35,6 +35,8 @@ public class CourseArrayAdapter extends ArrayAdapter<Course> {
 
         Course course = values[position];
 
+        rowView.findViewById(R.id.courseContainer).setBackgroundColor(course.getColor());
+
         ((TextView) rowView.findViewById(R.id.courseName)).setText(course.getName());
         ((TextView) rowView.findViewById(R.id.courseCode)).setText(course.getCourseCode());
         ((TextView) rowView.findViewById(R.id.courseCredits)).setText(""+course.getCredits());

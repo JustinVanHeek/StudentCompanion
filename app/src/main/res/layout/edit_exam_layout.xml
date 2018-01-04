@@ -26,14 +26,10 @@
                     android:layout_row="0"
                     android:text="Course:" />
 
-                <EditText
+                <Spinner
                     android:id="@+id/editCourse"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_column="1"
-                    android:layout_row="0"
-                    android:ems="10"
-                    android:inputType="textPersonName" />
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/textView5"
@@ -78,11 +74,12 @@
                     android:text="Date:" />
 
                 <EditText
-                    android:id="@+id/editDueDate"
+                    android:id="@+id/editDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:editable="false"
                     android:ems="10"
-                    android:inputType="date" />
+                    android:inputType="none" />
 
                 <TextView
                     android:id="@+id/textView16"
@@ -170,6 +167,17 @@
                     android:text="Submit" />
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/deleteButton"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:text="Delete"
+                android:textColorLink="@color/colorAccent"
+                android:textStyle="bold" />
 
 
         </LinearLayout>

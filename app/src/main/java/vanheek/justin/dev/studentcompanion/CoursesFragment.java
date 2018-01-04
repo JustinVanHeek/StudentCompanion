@@ -41,6 +41,7 @@ public class CoursesFragment extends ListFragment implements AdapterView.OnItemC
 
         //Change Header Title
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(((MainActivity) getActivity()).semesters[((MainActivity) getActivity()).currentSemester].getName());
+        ((MainActivity) getActivity()).findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
         //Clickable Semester Title
         android.support.v7.app.ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
