@@ -61,7 +61,7 @@ public class AssignmentArrayAdapter extends ArrayAdapter<Assignment> {
                 dueTimeText = "Due in " + dueIn + " days";
             }
 
-            Log.d("DueDateCalc",position+ " " + start + " " + end + " " + dueIn);
+            //Log.d("DueDateCalc",position+ " " + start + " " + end + " " + dueIn);
 
             ((TextView) rowView.findViewById(R.id.assignmentTime)).setText(dueTimeText);
         }

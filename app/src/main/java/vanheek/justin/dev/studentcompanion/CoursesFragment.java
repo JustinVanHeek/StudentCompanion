@@ -55,7 +55,8 @@ public class CoursesFragment extends ListFragment implements AdapterView.OnItemC
 
 
             // Change the font family (optional)
-            customTitle.setTypeface(Typeface.MONOSPACE);
+            customTitle.setTypeface(Typeface.DEFAULT_BOLD);
+            customTitle.setTextSize(20);
             customTitle.setTextColor(Color.WHITE);
             customTitle.setText(((MainActivity) getActivity()).semesters[((MainActivity) getActivity()).currentSemester].getName());
             // Set the on click listener for the title
@@ -63,7 +64,7 @@ public class CoursesFragment extends ListFragment implements AdapterView.OnItemC
                 @Override
                 public void onClick(View v) {
                     Log.w("MainActivity", "ActionBar's title clicked.");
-                    restoreActionBar();
+                    Util.restoreActionBar((MainActivity)getActivity());
                     FragmentManager fragmentManager = getFragmentManager();
                     fragmentManager.beginTransaction().replace(R.id.content_frame, new SemesterFragment()).commit();
 
@@ -75,12 +76,6 @@ public class CoursesFragment extends ListFragment implements AdapterView.OnItemC
 
 
         return myView;
-    }
-
-    public void restoreActionBar() {
-        android.support.v7.app.ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setDisplayShowCustomEnabled(false);
     }
 
     @Override
@@ -109,7 +104,7 @@ public class CoursesFragment extends ListFragment implements AdapterView.OnItemC
     //Open the EditCourseFragment with the clicked course
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        restoreActionBar();
+        Util.restoreActionBar((MainActivity)getActivity());
         Course course = ((MainActivity) getActivity()).semesters[((MainActivity) getActivity()).currentSemester].getCourses().get(position);
         CourseDetailsFragment frag = new CourseDetailsFragment();
         frag.setCourse(course);
@@ -126,7 +121,7 @@ public class CoursesFragment extends ListFragment implements AdapterView.OnItemC
         switch (item.getItemId()) {
 
             case R.id.menu_item_add_course:
-                restoreActionBar();
+                Util.restoreActionBar((MainActivity)getActivity());
                 fragmentManager.beginTransaction().replace(R.id.content_frame, new EditCourseFragment()).commit();
                 return true;
             case android.R.id.home:

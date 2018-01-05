@@ -1,5 +1,7 @@
 package vanheek.justin.dev.studentcompanion;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +19,13 @@ public class HomeCourseArrayAdapter extends ArrayAdapter<Course> {
 
     private final Context context;
     private final Course[] values;
+    private final Fragment fragment;
 
-    public HomeCourseArrayAdapter(Context context, Course[] values) {
+    public HomeCourseArrayAdapter(Context context, Course[] values, Fragment f) {
         super(context, -1, values);
         this.context = context;
         this.values = values;
+        fragment = f;
     }
 
     @Override
@@ -31,11 +35,21 @@ public class HomeCourseArrayAdapter extends ArrayAdapter<Course> {
 
         View rowView = inflater.inflate(R.layout.home_row, parent, false);
 
-        Course course = values[position];
+        final Course course = values[position];
 
         rowView.findViewById(R.id.container).setBackgroundColor(course.getColor());
 
         ((TextView) rowView.findViewById(R.id.itemName)).setText(course.getName());
+
+        rowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = fragment.getFragmentManager();
+                CourseDetailsFragment frag = new CourseDetailsFragment();
+                frag.setCourse(course);
+                fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();
+            }
+        });
 
         return rowView;
     }

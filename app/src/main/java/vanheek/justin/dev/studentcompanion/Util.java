@@ -1,5 +1,7 @@
 package vanheek.justin.dev.studentcompanion;
 
+import android.app.Fragment;
+
 import java.util.ArrayList;
 
 /**
@@ -31,6 +33,12 @@ public class Util<T> {
         for(T element : removed) {
             list.add(element);
         }
+    }
+
+    public static void restoreActionBar(MainActivity act) {
+        android.support.v7.app.ActionBar actionBar = act.getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayShowCustomEnabled(false);
     }
 
 }

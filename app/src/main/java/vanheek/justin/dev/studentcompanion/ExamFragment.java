@@ -33,6 +33,7 @@ public class ExamFragment extends ListFragment implements AdapterView.OnItemClic
 
         //Change Header Title
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Exams");
+        ((MainActivity) getActivity()).findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
         return myView;
     }

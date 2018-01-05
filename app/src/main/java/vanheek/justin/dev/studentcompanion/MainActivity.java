@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         android.app.FragmentManager fragmentManager = getFragmentManager();
+        Util.restoreActionBar(this);
 
         if (id == R.id.nav_courses_layout) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new CoursesFragment()).commit();
@@ -116,10 +117,8 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.content_frame, new AssignmentFragment()).commit();
         } else if (id == R.id.nav_exam_layout) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new ExamFragment()).commit();
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_home_layout) {
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new HomeFragment()).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

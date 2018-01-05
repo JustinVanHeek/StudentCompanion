@@ -1,5 +1,7 @@
 package vanheek.justin.dev.studentcompanion;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +20,13 @@ public class HomeExamArrayAdapter extends ArrayAdapter<Exam> {
 
     private final Context context;
     private final Exam[] values;
+    private final Fragment fragment;
 
-    public HomeExamArrayAdapter(Context context, Exam[] values) {
+    public HomeExamArrayAdapter(Context context, Exam[] values, Fragment f) {
         super(context, -1, values);
         this.context = context;
         this.values = values;
+        fragment = f;
     }
 
     @Override
@@ -32,11 +36,21 @@ public class HomeExamArrayAdapter extends ArrayAdapter<Exam> {
 
         View rowView = inflater.inflate(R.layout.home_row, parent, false);
 
-        Exam exam = values[position];
+        final Exam exam = values[position];
 
         rowView.findViewById(R.id.container).setBackgroundColor(exam.getCourse().getColor());
 
         ((TextView) rowView.findViewById(R.id.itemName)).setText(exam.getName());
+
+        rowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = fragment.getFragmentManager();
+                ExamDetailsFragment frag = new ExamDetailsFragment();
+                frag.setExam(exam);
+                fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();
+            }
+        });
 
         return rowView;
     }

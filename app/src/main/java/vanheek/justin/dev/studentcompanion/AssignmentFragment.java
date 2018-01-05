@@ -1,10 +1,10 @@
 package vanheek.justin.dev.studentcompanion;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ListFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,11 +12,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 
 import vanheek.justin.dev.studentcompanion.objects.Assignment;
 import vanheek.justin.dev.studentcompanion.objects.Course;
+import vanheek.justin.dev.studentcompanion.objects.Milestone;
 
 /**
  * Created by justi on 2017-12-29.
@@ -25,7 +27,9 @@ import vanheek.justin.dev.studentcompanion.objects.Course;
 public class AssignmentFragment extends ListFragment implements AdapterView.OnItemClickListener {
 
     View myView;
-    private Assignment[] allAssignments;
+    private Assignment[] assignmentsByDueDate;
+    private Assignment[] assignmentsByMilestone;
+    private boolean byDueDate = true;
 
     @Nullable
     @Override
@@ -34,6 +38,24 @@ public class AssignmentFragment extends ListFragment implements AdapterView.OnIt
 
         //Change Header Title
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Assignments");
+        ((MainActivity) getActivity()).findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+        //Sorting button
+        myView.findViewById(R.id.toggleButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(((ToggleButton)myView.findViewById(R.id.toggleButton)).isChecked()) {
+                    Log.d("Assignment List","Sort by Milestone");
+                    listByMilestone();
+                    byDueDate = false;
+                }
+                else {
+                    Log.d("Assignment List","Sort by Due Date");
+                    listByDueDate();
+                    byDueDate = true;
+                }
+            }
+        });
 
         return myView;
     }
@@ -56,31 +78,127 @@ public class AssignmentFragment extends ListFragment implements AdapterView.OnIt
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getAllAssignments();
-        AssignmentArrayAdapter adapter = new AssignmentArrayAdapter(getActivity(), allAssignments);
+        listByDueDate();
+    }
+
+    private void listByDueDate() {
+        getByDueDate();
+        AssignmentArrayAdapter adapter = new AssignmentArrayAdapter(getActivity(), assignmentsByDueDate);
+        adapter.notifyDataSetChanged();
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
     }
 
-    private void getAllAssignments() {
+    private void getByDueDate() {
+        ArrayList<Assignment> assignments = getAllAssignments();
+        ArrayList<Assignment> sortedAssignments = new ArrayList<Assignment>();
+        while(assignments.size() > 0) {
+            Assignment earliest = null;
+            for(Assignment a : assignments) {
+                if(earliest == null) {
+                    earliest = a;
+                }
+                else {
+                    if(a.compareTo(earliest) < 0) {
+                        earliest = a;
+                    }
+                }
+            }
+            assignments.remove(earliest);
+            sortedAssignments.add(earliest);
+        }
+        assignmentsByDueDate = new Assignment[sortedAssignments.size()];
+        for(int i = 0; i < assignmentsByDueDate.length; i++) {
+            assignmentsByDueDate[i] = sortedAssignments.get(i);
+        }
+    }
+
+    private void listByMilestone() {
+        getByMilestone();
+        AssignmentArrayAdapter adapter = new AssignmentArrayAdapter(getActivity(), assignmentsByMilestone);
+        adapter.notifyDataSetChanged();
+        setListAdapter(adapter);
+        getListView().setOnItemClickListener(this);
+    }
+
+    private void getByMilestone() {
+        ArrayList<Assignment> assignments = getAllAssignments();
+        ArrayList<Assignment> dateAssignments = new ArrayList<Assignment>();
+        while(assignments.size() > 0) {
+            Assignment earliest = null;
+            for(Assignment a : assignments) {
+                if(earliest == null) {
+                    earliest = a;
+                }
+                else {
+                    if(a.compareTo(earliest) < 0) {
+                        earliest = a;
+                    }
+                }
+            }
+            assignments.remove(earliest);
+            dateAssignments.add(earliest);
+        }
+        ArrayList<Assignment> sortedAssignments = new ArrayList<Assignment>();
+        while(dateAssignments.size() > 0) {
+            Assignment earliest = null;
+            for(Assignment a : dateAssignments) {
+                if(earliest == null) {
+                    earliest = a;
+                }
+                else {
+                    for(Milestone m : a.getMilestones()) {
+                        if(m.getDate() != null && !m.isComplete()) {
+                            if(earliest.getMilestones().size() == 0) {
+                                earliest = a;
+                            }
+                            else {
+                                for (Milestone m2 : earliest.getMilestones()) {
+                                    if (m2.getDate() != null && !m2.isComplete()) {
+                                        if (m.getDate().compareTo(m2.getDate()) < 0) {
+                                            earliest = a;
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            if(earliest == null) {
+                earliest = dateAssignments.get(0);
+            }
+            dateAssignments.remove(earliest);
+            sortedAssignments.add(earliest);
+        }
+        assignmentsByMilestone = new Assignment[sortedAssignments.size()];
+        for(int i = 0; i < assignmentsByMilestone.length; i++) {
+            assignmentsByMilestone[i] = sortedAssignments.get(i);
+        }
+    }
+
+    private ArrayList<Assignment> getAllAssignments() {
         ArrayList<Assignment> assignments = new ArrayList<Assignment>();
         for(Course c : ((MainActivity) getActivity()).semesters[((MainActivity) getActivity()).currentSemester].getCourses()) {
             for(Assignment a : c.getAssignments()) {
                 assignments.add(a);
             }
         }
-        allAssignments = new Assignment[assignments.size()];
-        int i = 0;
-        for(Assignment a : assignments) {
-            allAssignments[i] = a;
-            i++;
-        }
+        return assignments;
     }
 
     //Open the EditCourseFragment with the clicked course
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Assignment assignment = allAssignments[position];
+        Assignment assignment;
+        if(byDueDate) {
+            assignment = assignmentsByDueDate[position];
+        }
+        else {
+            assignment = assignmentsByMilestone[position];
+        }
         AssignmentDetailsFragment frag = new AssignmentDetailsFragment();
         frag.setAssignment(assignment);
         FragmentManager fragmentManager = getFragmentManager();
