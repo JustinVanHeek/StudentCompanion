@@ -30,10 +30,14 @@ public class SemesterFragment extends ListFragment implements AdapterView.OnItem
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.assignments_layout, container, false);
+        myView = inflater.inflate(R.layout.semester_layout, container, false);
 
         //Change Header Title
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Semesters");
+
+        if(((MainActivity)getActivity()).semesters.size() == 0) {
+            myView.findViewById(R.id.semesterPrompt).setVisibility(View.VISIBLE);
+        }
 
         return myView;
     }
@@ -56,7 +60,11 @@ public class SemesterFragment extends ListFragment implements AdapterView.OnItem
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        SemesterArrayAdapter adapter = new SemesterArrayAdapter(getActivity(), ((MainActivity) getActivity()).semesters,this);
+        Semester[] array = new Semester[((MainActivity) getActivity()).semesters.size()];
+        for(int i = 0; i < ((MainActivity) getActivity()).semesters.size(); i++) {
+            array[i] = ((MainActivity) getActivity()).semesters.get(i);
+        }
+        SemesterArrayAdapter adapter = new SemesterArrayAdapter(getActivity(), array,this);
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
     }

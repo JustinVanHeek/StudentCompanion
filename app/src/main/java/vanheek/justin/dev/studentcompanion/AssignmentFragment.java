@@ -36,27 +36,33 @@ public class AssignmentFragment extends ListFragment implements AdapterView.OnIt
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.assignments_layout, container, false);
 
-        //Change Header Title
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Assignments");
-        ((MainActivity) getActivity()).findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        //If there is no semester, force the user to go to the semester screen to create one
+        if(((MainActivity) getActivity()).semesters.size() == 0) {
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new SemesterFragment()).commit();
+        }
+        else {
 
-        //Sorting button
-        myView.findViewById(R.id.toggleButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(((ToggleButton)myView.findViewById(R.id.toggleButton)).isChecked()) {
-                    Log.d("Assignment List","Sort by Milestone");
-                    listByMilestone();
-                    byDueDate = false;
-                }
-                else {
-                    Log.d("Assignment List","Sort by Due Date");
-                    listByDueDate();
-                    byDueDate = true;
-                }
-            }
-        });
+            //Change Header Title
+            ((MainActivity) getActivity()).getSupportActionBar().setTitle("Assignments");
+            ((MainActivity) getActivity()).findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
+            //Sorting button
+            myView.findViewById(R.id.toggleButton).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (((ToggleButton) myView.findViewById(R.id.toggleButton)).isChecked()) {
+                        Log.d("Assignment List", "Sort by Milestone");
+                        listByMilestone();
+                        byDueDate = false;
+                    } else {
+                        Log.d("Assignment List", "Sort by Due Date");
+                        listByDueDate();
+                        byDueDate = true;
+                    }
+                }
+            });
+        }
         return myView;
     }
 
@@ -78,7 +84,10 @@ public class AssignmentFragment extends ListFragment implements AdapterView.OnIt
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        listByDueDate();
+        if(((MainActivity) getActivity()).semesters.size() > 0) {
+
+            listByDueDate();
+        }
     }
 
     private void listByDueDate() {
@@ -181,7 +190,7 @@ public class AssignmentFragment extends ListFragment implements AdapterView.OnIt
 
     private ArrayList<Assignment> getAllAssignments() {
         ArrayList<Assignment> assignments = new ArrayList<Assignment>();
-        for(Course c : ((MainActivity) getActivity()).semesters[((MainActivity) getActivity()).currentSemester].getCourses()) {
+        for(Course c : ((MainActivity) getActivity()).semesters.get(((MainActivity) getActivity()).currentSemester).getCourses()) {
             for(Assignment a : c.getAssignments()) {
                 assignments.add(a);
             }

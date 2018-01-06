@@ -30,12 +30,19 @@ public class ExamFragment extends ListFragment implements AdapterView.OnItemClic
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.assignments_layout, container, false);
+        myView = inflater.inflate(R.layout.exams_layout, container, false);
 
-        //Change Header Title
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Exams");
-        ((MainActivity) getActivity()).findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        //If there is no semester, force the user to go to the semester screen to create one
+        if(((MainActivity) getActivity()).semesters.size() == 0) {
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new SemesterFragment()).commit();
+        }
+        else {
 
+            //Change Header Title
+            ((MainActivity) getActivity()).getSupportActionBar().setTitle("Exams");
+            ((MainActivity) getActivity()).findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        }
         return myView;
     }
 
@@ -57,12 +64,15 @@ public class ExamFragment extends ListFragment implements AdapterView.OnItemClic
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        listByDueDate();
+        if(((MainActivity) getActivity()).semesters.size() > 0) {
+
+            listByDueDate();
+        }
     }
 
     private ArrayList<Exam> getAllAssignments() {
         ArrayList<Exam> assignments = new ArrayList<Exam>();
-        for(Course c : ((MainActivity) getActivity()).semesters[((MainActivity) getActivity()).currentSemester].getCourses()) {
+        for(Course c : ((MainActivity) getActivity()).semesters.get(((MainActivity) getActivity()).currentSemester).getCourses()) {
             for(Exam a : c.getExams()) {
                 assignments.add(a);
             }

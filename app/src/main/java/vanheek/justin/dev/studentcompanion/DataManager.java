@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 import vanheek.justin.dev.studentcompanion.objects.Semester;
 
@@ -51,7 +52,7 @@ public class DataManager {
             ObjectInputStream ois = new ObjectInputStream(fis);
 
             try {
-                act.semesters = (Semester[]) ois.readObject();
+                act.semesters = (ArrayList<Semester>) ois.readObject();
                 act.currentSemester = ois.readInt();
                 Log.d("DataManager", "Load Successful");
             } catch (ClassNotFoundException e) {

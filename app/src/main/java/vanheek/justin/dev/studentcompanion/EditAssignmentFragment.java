@@ -146,9 +146,9 @@ public class EditAssignmentFragment extends Fragment {
     }
 
     private String[] getStringArrayOfCourses() {
-        String[] result = new String[((MainActivity)getActivity()).semesters[((MainActivity)getActivity()).currentSemester].getCourses().size()];
+        String[] result = new String[((MainActivity)getActivity()).semesters.get(((MainActivity) getActivity()).currentSemester).getCourses().size()];
         for(int i = 0; i < result.length; i++) {
-            result[i] = ((MainActivity)getActivity()).semesters[((MainActivity)getActivity()).currentSemester].getCourses().get(i).getName();
+            result[i] = ((MainActivity)getActivity()).semesters.get(((MainActivity) getActivity()).currentSemester).getCourses().get(i).getName();
         }
         return result;
     }
@@ -163,7 +163,7 @@ public class EditAssignmentFragment extends Fragment {
         if(assignment.getCourse() != null) {
             assignment.getCourse().removeAssignment(assignment);
         }
-        assignment.setCourse(((MainActivity) getActivity()).semesters[((MainActivity)getActivity()).currentSemester].getCourses().get(courseIndex));
+        assignment.setCourse(((MainActivity) getActivity()).semesters.get(((MainActivity) getActivity()).currentSemester).getCourses().get(courseIndex));
         assignment.setName(((EditText) myView.findViewById(R.id.editName)).getText().toString());
         try {
             assignment.setPercentOfGrade(Double.parseDouble(((EditText) myView.findViewById(R.id.editPercent)).getText().toString()));
@@ -191,7 +191,7 @@ public class EditAssignmentFragment extends Fragment {
     private void fillAssignmentForm() {
         if(assignment != null) {
 
-            ((Spinner) myView.findViewById(R.id.editCourse)).setSelection(new Util<Course>().find(assignment.getCourse(), ((MainActivity) getActivity()).semesters[((MainActivity)getActivity()).currentSemester].getCoursesAsArray()));
+            ((Spinner) myView.findViewById(R.id.editCourse)).setSelection(new Util<Course>().find(assignment.getCourse(), ((MainActivity) getActivity()).semesters.get(((MainActivity) getActivity()).currentSemester).getCoursesAsArray()));
             ((EditText) myView.findViewById(R.id.editName)).setText(assignment.getName());
             ((EditText) myView.findViewById(R.id.editPercent)).setText(assignment.getPercentOfGrade()+"");
             if(assignment.getDue() != null) {

@@ -129,9 +129,9 @@ public class EditExamFragment extends Fragment {
     }
 
     private String[] getStringArrayOfCourses() {
-        String[] result = new String[((MainActivity)getActivity()).semesters[((MainActivity)getActivity()).currentSemester].getCourses().size()];
+        String[] result = new String[((MainActivity)getActivity()).semesters.get(((MainActivity)getActivity()).currentSemester).getCourses().size()];
         for(int i = 0; i < result.length; i++) {
-            result[i] = ((MainActivity)getActivity()).semesters[((MainActivity)getActivity()).currentSemester].getCourses().get(i).getName();
+            result[i] = ((MainActivity)getActivity()).semesters.get(((MainActivity)getActivity()).currentSemester).getCourses().get(i).getName();
         }
         return result;
     }
@@ -145,7 +145,7 @@ public class EditExamFragment extends Fragment {
         if(exam.getCourse() != null) {
             exam.getCourse().getExams().remove(exam);
         }
-        exam.setCourse(((MainActivity) getActivity()).semesters[((MainActivity)getActivity()).currentSemester].getCourses().get(courseIndex));
+        exam.setCourse(((MainActivity) getActivity()).semesters.get(((MainActivity)getActivity()).currentSemester).getCourses().get(courseIndex));
 
         exam.setDate(date);
         exam.setName(((EditText) myView.findViewById(R.id.editName)).getText().toString());
@@ -166,7 +166,7 @@ public class EditExamFragment extends Fragment {
     private void fillAssignmentForm() {
         if(exam != null) {
 
-            ((Spinner) myView.findViewById(R.id.editCourse)).setSelection(new Util<Course>().find(exam.getCourse(), ((MainActivity) getActivity()).semesters[((MainActivity)getActivity()).currentSemester].getCoursesAsArray()));
+            ((Spinner) myView.findViewById(R.id.editCourse)).setSelection(new Util<Course>().find(exam.getCourse(), ((MainActivity) getActivity()).semesters.get(((MainActivity)getActivity()).currentSemester).getCoursesAsArray()));
             ((EditText) myView.findViewById(R.id.editName)).setText(exam.getName());
             ((EditText) myView.findViewById(R.id.editPercent)).setText(exam.getPercentOfGrade()+"");
             if(exam.getDate() != null) {

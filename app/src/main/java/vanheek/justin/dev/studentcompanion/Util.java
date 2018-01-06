@@ -19,6 +19,15 @@ public class Util<T> {
         return -1;
     }
 
+    public int find(T target, ArrayList<T> array) {
+        for(int i = 0; i < array.size(); i++) {
+            if(array.get(i) == target) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public void insertInto(ArrayList<T> list, int position, T item) {
         ArrayList<T> removed = new ArrayList<T>();
         removed.add(item);

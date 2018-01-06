@@ -1,6 +1,7 @@
 package vanheek.justin.dev.studentcompanion;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -30,14 +31,21 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.home_layout, container, false);
 
-        //Change Header Title
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Student Companion");
-        ((MainActivity) getActivity()).findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        //If there is no semester, force the user to go to the semester screen to create one
+        if(((MainActivity) getActivity()).semesters.size() == 0) {
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new SemesterFragment()).commit();
+        }
+        else {
 
-        createTodaysLists();
-        createTomorrowsLists();
-        createNextWeeksLists();
+            //Change Header Title
+            ((MainActivity) getActivity()).getSupportActionBar().setTitle("Student Companion");
+            ((MainActivity) getActivity()).findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
+            createTodaysLists();
+            createTomorrowsLists();
+            createNextWeeksLists();
+        }
         return myView;
     }
 
@@ -107,7 +115,7 @@ public class HomeFragment extends Fragment {
 
 
     private Course[] getCoursesWithDate(Calendar start, Calendar end) {
-        ArrayList<Course> courses = ((MainActivity)getActivity()).semesters[((MainActivity)getActivity()).currentSemester].getCourses();
+        ArrayList<Course> courses = ((MainActivity)getActivity()).semesters.get(((MainActivity)getActivity()).currentSemester).getCourses();
         ArrayList<Course> allCourses = new ArrayList<Course>();
         Calendar tempCal = Calendar.getInstance();
         tempCal.set(start.get(Calendar.YEAR),start.get(Calendar.MONTH),start.get(Calendar.DAY_OF_MONTH));
@@ -146,7 +154,7 @@ public class HomeFragment extends Fragment {
     private Exam[] getExamsWithDate(Calendar start, Calendar end) {
         Exam[] allExams = null;
         ArrayList<Exam> exams = new ArrayList<Exam>();
-        for(Course c : ((MainActivity) getActivity()).semesters[((MainActivity) getActivity()).currentSemester].getCourses()) {
+        for(Course c : ((MainActivity) getActivity()).semesters.get(((MainActivity) getActivity()).currentSemester).getCourses()) {
             for(Exam e : c.getExams()) {
                 if(e.getDate() !=null) {
                     if (e.getDate().compareTo(start) >= 0 && e.getDate().compareTo(end) <= 0) {
@@ -167,7 +175,7 @@ public class HomeFragment extends Fragment {
     private Assignment[] getAssignmentWithDate(Calendar start, Calendar end) {
         Assignment[] allAssignments = null;
         ArrayList<Assignment> assignments = new ArrayList<Assignment>();
-        for(Course c : ((MainActivity) getActivity()).semesters[((MainActivity) getActivity()).currentSemester].getCourses()) {
+        for(Course c : ((MainActivity) getActivity()).semesters.get(((MainActivity) getActivity()).currentSemester).getCourses()) {
             for(Assignment a : c.getAssignments()) {
                 if(a.getDue() != null) {
                     Log.d("Home", a.getDue().getTime().toString() + start.getTime().toString());

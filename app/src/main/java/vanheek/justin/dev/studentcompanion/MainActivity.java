@@ -18,6 +18,7 @@ import android.view.MenuItem;
 
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -31,7 +32,7 @@ import vanheek.justin.dev.studentcompanion.objects.WeeklySchedule;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public Semester[] semesters;
+    public ArrayList<Semester> semesters = new ArrayList<Semester>();
     public int currentSemester;
     public ColorPicker cp;
 
@@ -41,8 +42,6 @@ public class MainActivity extends AppCompatActivity
         //Testing purposes
         boolean cleanStart = false;
         if(cleanStart) {
-            Semester s = new Semester("Clean Slate", Calendar.getInstance(), Calendar.getInstance());
-            semesters = new Semester[]{s};
             DataManager.saveData(this);
         }
 
@@ -127,11 +126,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void addSemester(Semester semester) {
-        Semester[] temp = new Semester[semesters.length+1];
-        for (int i = 0; i < semesters.length; i++) {
-            temp[i] = semesters[i];
-        }
-        temp[semesters.length] = semester;
-        semesters = temp;
+        semesters.add(semester);
     }
 }

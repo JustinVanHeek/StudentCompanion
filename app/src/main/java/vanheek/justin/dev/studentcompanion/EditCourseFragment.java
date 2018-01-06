@@ -27,6 +27,7 @@ import android.widget.TimePicker;
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import vanheek.justin.dev.studentcompanion.objects.Assignment;
@@ -132,10 +133,10 @@ public class EditCourseFragment extends Fragment {
     }
 
     private String[] getStringArrayOfSemesters() {
-        Semester[] semesters = ((MainActivity)getActivity()).semesters;
-        String[] result = new String[semesters.length];
-        for(int i = 0; i < semesters.length; i++) {
-            result[i] = semesters[i].getName();
+        ArrayList<Semester> semesters = ((MainActivity)getActivity()).semesters;
+        String[] result = new String[semesters.size()];
+        for(int i = 0; i < semesters.size(); i++) {
+            result[i] = semesters.get(i).getName();
         }
         return result;
     }
@@ -275,8 +276,8 @@ public class EditCourseFragment extends Fragment {
             //}
         }
         //Set the semester
-        ((MainActivity) getActivity()).semesters[((Spinner)myView.findViewById(R.id.editSemester)).getSelectedItemPosition()].addCourse(course);
-        course.setSemester(((MainActivity) getActivity()).semesters[((Spinner)myView.findViewById(R.id.editSemester)).getSelectedItemPosition()]);
+        ((MainActivity) getActivity()).semesters.get(((Spinner)myView.findViewById(R.id.editSemester)).getSelectedItemPosition()).addCourse(course);
+        course.setSemester(((MainActivity) getActivity()).semesters.get(((Spinner)myView.findViewById(R.id.editSemester)).getSelectedItemPosition()));
 
         course.setName(((EditText) myView.findViewById(R.id.editName)).getText().toString());
         course.setColor(chosenColor);

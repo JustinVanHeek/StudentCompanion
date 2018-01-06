@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.util.Calendar;
 
 import vanheek.justin.dev.studentcompanion.objects.Exam;
+import vanheek.justin.dev.studentcompanion.objects.Milestone;
 import vanheek.justin.dev.studentcompanion.objects.Semester;
 
 /**
@@ -34,7 +35,7 @@ public class EditSemesterFragment extends Fragment {
         myView = inflater.inflate(R.layout.edit_semester_layout, container, false);
 
         //Change Header Title
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Edit Assignment");
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Edit Semester");
 
         //Button Listeners
         myView.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
@@ -132,27 +133,14 @@ public class EditSemesterFragment extends Fragment {
     }
 
     private void delete() {
-        Semester[] semesters = ((MainActivity) getActivity()).semesters;
-        Semester[] temp = new Semester[semesters.length-1];
-        if(semesters.length == 1) {
-            Semester[] defaultSem = {new Semester("Default Semester", Calendar.getInstance(), Calendar.getInstance())};
-            ((MainActivity) getActivity()).semesters = defaultSem;
-            return;
-        }
-        boolean shift = false;
-        for(int i = 0; i < semesters.length; i++) {
-            if(shift) {
-                temp[i-1] = semesters[i];
-            }
-            else {
-                temp[i] = semesters[i];
-            }
-            if(semesters[i] == semester) {
-                shift = true;
+        int index = new Util<Semester>().find(semester,((MainActivity)getActivity()).semesters);
+        if(((MainActivity)getActivity()).currentSemester >= index) {
+            ((MainActivity)getActivity()).currentSemester = ((MainActivity)getActivity()).currentSemester - 1;
+            if(((MainActivity)getActivity()).currentSemester < 0) {
+                ((MainActivity)getActivity()).currentSemester = 0;
             }
         }
-        ((MainActivity) getActivity()).semesters = temp;
-
+        ((MainActivity) getActivity()).semesters.remove(semester);
 
         //Save changes to storage
         DataManager.saveData((MainActivity) getActivity());
