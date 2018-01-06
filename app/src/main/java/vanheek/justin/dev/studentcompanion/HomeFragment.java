@@ -56,17 +56,26 @@ public class HomeFragment extends Fragment {
         todayEnd.set(Calendar.HOUR_OF_DAY,22);
         Log.d("Home","Getting today's courses...");
 
+        Course[] courses = getCoursesWithDate(todayStart,todayEnd);
+        Assignment[] assignments = getAssignmentWithDate(todayStart,todayEnd);
+        Exam[] exams = getExamsWithDate(todayStart,todayEnd);
+
         //Courses
-        HomeCourseArrayAdapter adapterC = new HomeCourseArrayAdapter(getActivity(), getCoursesWithDate(todayStart,todayEnd),this);
+        HomeCourseArrayAdapter adapterC = new HomeCourseArrayAdapter(getActivity(), courses,this);
         ((ListView)myView.findViewById(R.id.homeClassesToday)).setAdapter(adapterC);
 
         //Assignments
-        HomeAssignmentArrayAdapter adapterA = new HomeAssignmentArrayAdapter(getActivity(), getAssignmentWithDate(todayStart,todayEnd),this);
+        HomeAssignmentArrayAdapter adapterA = new HomeAssignmentArrayAdapter(getActivity(), assignments,this);
         ((ListView)myView.findViewById(R.id.homeAssignmentsToday)).setAdapter(adapterA);
 
         //Exams
-        HomeExamArrayAdapter adapterE = new HomeExamArrayAdapter(getActivity(), getExamsWithDate(todayStart,todayEnd),this);
+        HomeExamArrayAdapter adapterE = new HomeExamArrayAdapter(getActivity(), exams,this);
         ((ListView)myView.findViewById(R.id.homeExamsToday)).setAdapter(adapterE);
+
+        if(courses.length == 0 && assignments.length == 0 && exams.length == 0)  {
+            myView.findViewById(R.id.homeTextToday).setVisibility(View.GONE);
+            myView.findViewById(R.id.homeTodayLists).setVisibility(View.GONE);
+        }
     }
 
     private void createTomorrowsLists() {
@@ -78,17 +87,26 @@ public class HomeFragment extends Fragment {
         todayEnd.add(Calendar.DAY_OF_YEAR,1);
         Log.d("Home","Getting today's courses...");
 
+        Course[] courses = getCoursesWithDate(todayStart,todayEnd);
+        Assignment[] assignments = getAssignmentWithDate(todayStart,todayEnd);
+        Exam[] exams = getExamsWithDate(todayStart,todayEnd);
+
         //Courses
-        HomeCourseArrayAdapter adapterC = new HomeCourseArrayAdapter(getActivity(), getCoursesWithDate(todayStart,todayEnd),this);
+        HomeCourseArrayAdapter adapterC = new HomeCourseArrayAdapter(getActivity(), courses,this);
         ((ListView)myView.findViewById(R.id.homeClassesTomorrow)).setAdapter(adapterC);
 
         //Assignments
-        HomeAssignmentArrayAdapter adapterA = new HomeAssignmentArrayAdapter(getActivity(), getAssignmentWithDate(todayStart,todayEnd),this);
+        HomeAssignmentArrayAdapter adapterA = new HomeAssignmentArrayAdapter(getActivity(), assignments,this);
         ((ListView)myView.findViewById(R.id.homeAssignmentsTomorrow)).setAdapter(adapterA);
 
         //Exams
-        HomeExamArrayAdapter adapterE = new HomeExamArrayAdapter(getActivity(), getExamsWithDate(todayStart,todayEnd),this);
+        HomeExamArrayAdapter adapterE = new HomeExamArrayAdapter(getActivity(), exams,this);
         ((ListView)myView.findViewById(R.id.homeExamsTomorrow)).setAdapter(adapterE);
+
+        if(courses.length == 0 && assignments.length == 0 && exams.length == 0)  {
+            myView.findViewById(R.id.homeTextTomorrow).setVisibility(View.GONE);
+            myView.findViewById(R.id.homeTomorrowLists).setVisibility(View.GONE);
+        }
     }
 
     private void createNextWeeksLists() {
@@ -100,17 +118,26 @@ public class HomeFragment extends Fragment {
         todayEnd.add(Calendar.DAY_OF_YEAR,7);
         Log.d("Home","Getting today's courses...");
 
+        Course[] courses = getCoursesWithDate(todayStart,todayEnd);
+        Assignment[] assignments = getAssignmentWithDate(todayStart,todayEnd);
+        Exam[] exams = getExamsWithDate(todayStart,todayEnd);
+
         //Courses
-        HomeCourseArrayAdapter adapterC = new HomeCourseArrayAdapter(getActivity(), getCoursesWithDate(todayStart,todayEnd),this);
+        HomeCourseArrayAdapter adapterC = new HomeCourseArrayAdapter(getActivity(), courses,this);
         ((ListView)myView.findViewById(R.id.homeClassesWeek)).setAdapter(adapterC);
 
         //Assignments
-        HomeAssignmentArrayAdapter adapterA = new HomeAssignmentArrayAdapter(getActivity(), getAssignmentWithDate(todayStart,todayEnd),this);
+        HomeAssignmentArrayAdapter adapterA = new HomeAssignmentArrayAdapter(getActivity(), assignments,this);
         ((ListView)myView.findViewById(R.id.homeAssignmentsWeek)).setAdapter(adapterA);
 
         //Exams
-        HomeExamArrayAdapter adapterE = new HomeExamArrayAdapter(getActivity(), getExamsWithDate(todayStart,todayEnd),this);
+        HomeExamArrayAdapter adapterE = new HomeExamArrayAdapter(getActivity(), exams,this);
         ((ListView)myView.findViewById(R.id.homeExamsWeek)).setAdapter(adapterE);
+
+        if(courses.length == 0 && assignments.length == 0 && exams.length == 0)  {
+            myView.findViewById(R.id.homeTextWeek).setVisibility(View.GONE);
+            myView.findViewById(R.id.homeWeekLists).setVisibility(View.GONE);
+        }
     }
 
 
