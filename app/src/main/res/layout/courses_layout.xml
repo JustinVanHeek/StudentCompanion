@@ -8,4 +8,14 @@
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></ListView>
+
+    <TextView
+        android:id="@+id/coursesPrompt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Add a course to this semester by pressing the button at the top right."
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:visibility="gone" />
 </LinearLayout>

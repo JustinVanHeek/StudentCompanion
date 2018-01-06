@@ -70,9 +70,14 @@ public class EditCourseFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getFragmentManager();
-                CourseDetailsFragment frag = new CourseDetailsFragment();
-                frag.setCourse(course);
-                fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();
+                if(course != null) {
+                    CourseDetailsFragment frag = new CourseDetailsFragment();
+                    frag.setCourse(course);
+                    fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();
+                }
+                else {
+                    fragmentManager.beginTransaction().replace(R.id.content_frame, new CoursesFragment()).commit();
+                }
             }
 
         });
@@ -94,8 +99,10 @@ public class EditCourseFragment extends Fragment {
             public void onClick(View v) {
                 delete();
                 FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.content_frame, new CoursesFragment()).commit();
-            }
+
+                    fragmentManager.beginTransaction().replace(R.id.content_frame, new SemesterFragment()).commit();
+                }
+
 
         });
 

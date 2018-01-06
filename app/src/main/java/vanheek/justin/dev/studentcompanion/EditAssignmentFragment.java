@@ -33,12 +33,14 @@ public class EditAssignmentFragment extends Fragment {
     View myView;
     private Assignment assignment;
     private Calendar date;
+    boolean newAssignment = false;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.edit_assignment_layout, container, false);
         if(assignment == null) {
+            newAssignment = true;
             assignment = new Assignment();
         }
         date=assignment.getDue();
@@ -52,9 +54,14 @@ public class EditAssignmentFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getFragmentManager();
-                AssignmentDetailsFragment frag = new AssignmentDetailsFragment();
-                frag.setAssignment(assignment);
-                fragmentManager.beginTransaction().replace(R.id.content_frame,frag).commit();
+                if(!newAssignment) {
+                    AssignmentDetailsFragment frag = new AssignmentDetailsFragment();
+                    frag.setAssignment(assignment);
+                    fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();
+                }
+                else {
+                    fragmentManager.beginTransaction().replace(R.id.content_frame, new AssignmentFragment()).commit();
+                }
             }
 
         });

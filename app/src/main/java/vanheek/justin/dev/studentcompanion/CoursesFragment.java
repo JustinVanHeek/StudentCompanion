@@ -50,6 +50,11 @@ public class CoursesFragment extends ListFragment implements AdapterView.OnItemC
             ((MainActivity) getActivity()).getSupportActionBar().setTitle(((MainActivity) getActivity()).semesters.get(((MainActivity) getActivity()).currentSemester).getName());
             ((MainActivity) getActivity()).findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
+            //Prompt
+            if(((MainActivity)getActivity()).semesters.get(((MainActivity) getActivity()).currentSemester).getCourses().size() == 0) {
+                myView.findViewById(R.id.coursesPrompt).setVisibility(View.VISIBLE);
+            }
+
             //Clickable Semester Title
             android.support.v7.app.ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
             if (actionBar != null) {

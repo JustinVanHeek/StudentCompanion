@@ -30,12 +30,14 @@ public class EditExamFragment extends Fragment {
     View myView;
     private Exam exam;
     private Calendar date;
+    private boolean newExam = false;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.edit_exam_layout, container, false);
         if(exam == null) {
+            newExam = true;
             exam = new Exam();
         }
         date=exam.getDate();
@@ -49,9 +51,14 @@ public class EditExamFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getFragmentManager();
-                ExamDetailsFragment frag = new ExamDetailsFragment();
-                frag.setExam(exam);
-                fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();
+                if(!newExam) {
+                    ExamDetailsFragment frag = new ExamDetailsFragment();
+                    frag.setExam(exam);
+                    fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();
+                }
+                else {
+                    fragmentManager.beginTransaction().replace(R.id.content_frame, new ExamFragment()).commit();
+                }
             }
 
         });
