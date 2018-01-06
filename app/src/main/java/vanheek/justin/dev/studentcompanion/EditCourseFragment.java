@@ -270,9 +270,9 @@ public class EditCourseFragment extends Fragment {
         }
         else {
             //Check if semester changed
-            if(((Spinner)myView.findViewById(R.id.editSemester)).getSelectedItemPosition() != new Util<Semester>().find(course.getSemester(), ((MainActivity) getActivity()).semesters)) {
+            //if(((Spinner)myView.findViewById(R.id.editSemester)).getSelectedItemPosition() != new Util<Semester>().find(course.getSemester(), ((MainActivity) getActivity()).semesters)) {
                 course.getSemester().removeCourse(course);
-            }
+            //}
         }
         //Set the semester
         ((MainActivity) getActivity()).semesters[((Spinner)myView.findViewById(R.id.editSemester)).getSelectedItemPosition()].addCourse(course);
