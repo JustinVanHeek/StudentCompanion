@@ -57,7 +57,7 @@ public class ExamDetailsFragment extends Fragment {
         ((TextView) myView.findViewById(R.id.examCourse)).setText(exam.getCourse().getName());
         if(exam.getDate() != null) {
             SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-            ((TextView) myView.findViewById(R.id.examDate)).setText(format.format(exam.getDate().getTime()));
+            ((TextView) myView.findViewById(R.id.examDate)).setText(format.format(exam.getDate().getTime())+" "+exam.getTimeAsString());
         }
         else {
             ((TextView) myView.findViewById(R.id.examDate)).setText("");

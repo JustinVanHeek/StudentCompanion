@@ -42,6 +42,8 @@ public class ExamArrayAdapter extends ArrayAdapter<Exam> {
             String dueTimeText = "DUE";
             Calendar time = Calendar.getInstance();
             Calendar due = assignment.getDate();
+            due.set(Calendar.HOUR_OF_DAY,assignment.getTime()/100);
+            due.set(Calendar.MINUTE,assignment.getTime()-(assignment.getTime()/100)*100);
             int start = time.get(Calendar.DAY_OF_YEAR);
             int end = due.get(Calendar.DAY_OF_YEAR);
             int dueIn = end - start;
@@ -55,6 +57,25 @@ public class ExamArrayAdapter extends ArrayAdapter<Exam> {
                 rowView.setVisibility(View.GONE);
             } else if (dueIn == 0) {
                 dueTimeText = "Exam is today";
+                int hours = due.get(Calendar.HOUR_OF_DAY)-time.get(Calendar.HOUR_OF_DAY);
+                if(hours > 0) {
+                    dueTimeText = "Exam is in " + hours + " hours";
+                }
+                else if(hours == 0) {
+                    int minutes = due.get(Calendar.MINUTE)-time.get(Calendar.MINUTE);
+                    if(minutes > 0) {
+                        dueTimeText = "Exam is in " + minutes + " minutes";
+                    }
+                    else if(minutes == 0) {
+                        dueTimeText = "Exam is NOW!";
+                    }
+                    else {
+                        rowView.setVisibility(View.GONE);
+                    }
+                }
+                else {
+                    rowView.setVisibility(View.GONE);
+                }
             } else if (dueIn == 1) {
                 dueTimeText = "Exam is tomorrow";
             } else if (dueIn > 1) {

@@ -3,6 +3,7 @@ package vanheek.justin.dev.studentcompanion;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -13,6 +14,8 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -31,6 +34,7 @@ public class EditExamFragment extends Fragment {
     private Exam exam;
     private Calendar date;
     private boolean newExam = false;
+    private int time;
 
     @Nullable
     @Override
@@ -124,6 +128,30 @@ public class EditExamFragment extends Fragment {
                 mDatePicker.show();
             }
         });
+        //time picker
+        myView.findViewById(R.id.editTime).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        String minute = selectedMinute+"";
+                        if(selectedMinute < 10) {
+                            minute = "0" + minute;
+                        }
+                        ((EditText)myView.findViewById(R.id.editTime)).setText( selectedHour + ":" + minute);
+                        time = Integer.parseInt(selectedHour+""+minute);
+                    }
+                }, hour, minute, true);//Yes 24 hour time
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+            }
+        });
 
         return myView;
     }
@@ -164,6 +192,7 @@ public class EditExamFragment extends Fragment {
             exam.setGrade(-1);
         }
         exam.setNotes(((EditText) myView.findViewById(R.id.editNotes)).getText().toString());
+        exam.setTime(time);
         exam.getCourse().addExam(exam);
 
         //Save changes to storage
@@ -176,6 +205,7 @@ public class EditExamFragment extends Fragment {
             ((Spinner) myView.findViewById(R.id.editCourse)).setSelection(new Util<Course>().find(exam.getCourse(), ((MainActivity) getActivity()).semesters.get(((MainActivity)getActivity()).currentSemester).getCoursesAsArray()));
             ((EditText) myView.findViewById(R.id.editName)).setText(exam.getName());
             ((EditText) myView.findViewById(R.id.editPercent)).setText(exam.getPercentOfGrade()+"");
+            ((EditText)myView.findViewById(R.id.editTime)).setText(exam.getTimeAsString());
             if(exam.getDate() != null) {
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
                 ((EditText) myView.findViewById(R.id.editDate)).setText(format.format(exam.getDate().getTime()));
