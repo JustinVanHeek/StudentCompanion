@@ -28,6 +28,7 @@ public class EditMilestoneFragment extends Fragment {
     private Milestone milestone;
     private Assignment assignment;
     private Calendar date;
+    private boolean cameFromAssignmentDetails = false;
 
     @Nullable
     @Override
@@ -47,9 +48,16 @@ public class EditMilestoneFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getFragmentManager();
-                EditAssignmentFragment frag = new EditAssignmentFragment();
-                frag.setAssignment(assignment);
-                fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();
+                if(cameFromAssignmentDetails) {
+                    AssignmentDetailsFragment frag = new AssignmentDetailsFragment();
+                    frag.setAssignment(assignment);
+                    fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();
+                }
+                else {
+                    EditAssignmentFragment frag = new EditAssignmentFragment();
+                    frag.setAssignment(assignment);
+                    fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();
+                }
             }
 
         });
@@ -59,9 +67,16 @@ public class EditMilestoneFragment extends Fragment {
             public void onClick(View v) {
                 updateAssignment();
                 FragmentManager fragmentManager = getFragmentManager();
-                EditAssignmentFragment frag = new EditAssignmentFragment();
-                frag.setAssignment(assignment);
-                fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();
+                if(cameFromAssignmentDetails) {
+                    AssignmentDetailsFragment frag = new AssignmentDetailsFragment();
+                    frag.setAssignment(assignment);
+                    fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();
+                }
+                else {
+                    EditAssignmentFragment frag = new EditAssignmentFragment();
+                    frag.setAssignment(assignment);
+                    fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();
+                }
             }
 
         });
@@ -71,9 +86,16 @@ public class EditMilestoneFragment extends Fragment {
             public void onClick(View v) {
                 delete();
                 FragmentManager fragmentManager = getFragmentManager();
-                EditAssignmentFragment frag = new EditAssignmentFragment();
-                frag.setAssignment(assignment);
-                fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();
+                if(cameFromAssignmentDetails) {
+                    AssignmentDetailsFragment frag = new AssignmentDetailsFragment();
+                    frag.setAssignment(assignment);
+                    fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();
+                }
+                else {
+                    EditAssignmentFragment frag = new EditAssignmentFragment();
+                    frag.setAssignment(assignment);
+                    fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();
+                }
             }
 
         });
@@ -151,6 +173,10 @@ public class EditMilestoneFragment extends Fragment {
     public void setMilestone(Milestone exam, Assignment a) {
         this.milestone = exam;
         assignment = a;
+    }
+
+    public void setCameFromAssignmentDetails(Boolean b) {
+        cameFromAssignmentDetails = b;
     }
 
 }

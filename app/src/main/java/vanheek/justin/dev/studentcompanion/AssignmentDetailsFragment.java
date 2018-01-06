@@ -88,6 +88,7 @@ public class AssignmentDetailsFragment extends Fragment {
                 EditMilestoneFragment frag = new EditMilestoneFragment();
                 Milestone e = new Milestone();
                 frag.setMilestone(e,assignment);
+                frag.setCameFromAssignmentDetails(true);
                 fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();
             }
 

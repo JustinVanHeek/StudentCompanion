@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,7 +43,7 @@ public class MilestoneEditArrayAdapter extends ArrayAdapter<Milestone> {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View rowView = inflater.inflate(R.layout.milestones_row, parent, false);
+        final View rowView = inflater.inflate(R.layout.milestones_row, parent, false);
 
         final Milestone milestone = values[position];
 
@@ -73,6 +74,12 @@ else {
     ((TextView) rowView.findViewById(R.id.milestoneDate)).setText("");
 }
         ((CheckBox) rowView.findViewById(R.id.milestoneComplete)).setChecked(milestone.isComplete());
+        ((CheckBox) rowView.findViewById(R.id.milestoneComplete)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                milestone.setComplete(((CheckBox) rowView.findViewById(R.id.milestoneComplete)).isChecked());
+            }
+        });
         ((ImageView) rowView.findViewById(R.id.milestoneEdit)).setVisibility(View.VISIBLE);
         ((ImageView) rowView.findViewById(R.id.milestoneEdit)).setOnClickListener(new View.OnClickListener() {
             @Override
