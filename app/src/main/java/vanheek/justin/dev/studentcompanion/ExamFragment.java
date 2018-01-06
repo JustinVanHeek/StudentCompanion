@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 
 import java.util.ArrayList;
 
+import vanheek.justin.dev.studentcompanion.objects.Assignment;
 import vanheek.justin.dev.studentcompanion.objects.Course;
 import vanheek.justin.dev.studentcompanion.objects.Exam;
 
@@ -24,7 +25,7 @@ import vanheek.justin.dev.studentcompanion.objects.Exam;
 public class ExamFragment extends ListFragment implements AdapterView.OnItemClickListener {
 
     View myView;
-    private Exam[] allAssignments;
+    private Exam[] examsByDueDate;
 
     @Nullable
     @Override
@@ -56,31 +57,23 @@ public class ExamFragment extends ListFragment implements AdapterView.OnItemClic
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getAllAssignments();
-        ExamArrayAdapter adapter = new ExamArrayAdapter(getActivity(), allAssignments);
-        setListAdapter(adapter);
-        getListView().setOnItemClickListener(this);
+        listByDueDate();
     }
 
-    private void getAllAssignments() {
+    private ArrayList<Exam> getAllAssignments() {
         ArrayList<Exam> assignments = new ArrayList<Exam>();
         for(Course c : ((MainActivity) getActivity()).semesters[((MainActivity) getActivity()).currentSemester].getCourses()) {
             for(Exam a : c.getExams()) {
                 assignments.add(a);
             }
         }
-        allAssignments = new Exam[assignments.size()];
-        int i = 0;
-        for(Exam a : assignments) {
-            allAssignments[i] = a;
-            i++;
-        }
+        return assignments;
     }
 
     //Open the EditCourseFragment with the clicked course
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Exam assignment = allAssignments[position];
+        Exam assignment = examsByDueDate[position];
         ExamDetailsFragment frag = new ExamDetailsFragment();
         frag.setExam(assignment);
         FragmentManager fragmentManager = getFragmentManager();
@@ -98,5 +91,37 @@ public class ExamFragment extends ListFragment implements AdapterView.OnItemClic
                 return true;
         }
         return false;
+    }
+
+    private void listByDueDate() {
+        getByDueDate();
+        ExamArrayAdapter adapter = new ExamArrayAdapter(getActivity(), examsByDueDate);
+        adapter.notifyDataSetChanged();
+        setListAdapter(adapter);
+        getListView().setOnItemClickListener(this);
+    }
+
+    private void getByDueDate() {
+        ArrayList<Exam> assignments = getAllAssignments();
+        ArrayList<Exam> sortedAssignments = new ArrayList<Exam>();
+        while(assignments.size() > 0) {
+            Exam earliest = null;
+            for(Exam a : assignments) {
+                if(earliest == null) {
+                    earliest = a;
+                }
+                else {
+                    if(a.compareTo(earliest) < 0) {
+                        earliest = a;
+                    }
+                }
+            }
+            assignments.remove(earliest);
+            sortedAssignments.add(earliest);
+        }
+        examsByDueDate = new Exam[sortedAssignments.size()];
+        for(int i = 0; i < examsByDueDate.length; i++) {
+            examsByDueDate[i] = sortedAssignments.get(i);
+        }
     }
 }
