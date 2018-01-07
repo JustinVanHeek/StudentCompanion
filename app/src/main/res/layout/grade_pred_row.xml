@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/gradeCourse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Course Name" />
+
+        <TextView
+            android:id="@+id/gradePredictionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Predicted Grade: " />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/gradeEarnedText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Minimum Possible Grade: " />
+
+        <TextView
+            android:id="@+id/gradeLostText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Maximum Possible Grade: " />
+    </LinearLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/conLay"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            android:id="@+id/gradeBar"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_column="0"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_row="0"
+            android:background="@color/materialcolorpicker__grey"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/gradeLost"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:layout_column="0"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="15dp"
+            android:layout_row="0"
+            android:background="@android:color/holo_red_light"
+            app:layout_constraintRight_toRightOf="@+id/gradeBar"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/gradeEarned"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:layout_column="0"
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginTop="15dp"
+            android:layout_row="0"
+            android:background="@android:color/holo_green_dark"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="0dp"
+            app:layout_constraintLeft_toLeftOf="@+id/gradeBar" />
+
+        <TextView
+            android:id="@+id/gradePrediction"
+            android:layout_width="3dp"
+            android:layout_height="30dp"
+            android:layout_column="0"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_row="0"
+            android:background="@android:color/holo_blue_bright"
+            app:layout_constraintLeft_toLeftOf="@+id/gradeBar"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</LinearLayout>
