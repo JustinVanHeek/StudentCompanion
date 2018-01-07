@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home_layout"
@@ -21,7 +22,20 @@
         <item
             android:id="@+id/nav_grade_pred_layout"
             android:icon="@android:drawable/ic_dialog_info"
-            android:title="Grade Predictions" />
+            android:title="Grade Prediction" />
     </group>
+
+    <item android:title="Additional Tools">
+        <menu>
+            <item
+                android:id="@+id/nav_checklist_layout"
+                android:icon="@android:drawable/ic_menu_edit"
+                android:title="Program Checklist" />
+            <item
+                android:id="@+id/nav_planning_layout"
+                android:icon="@android:drawable/ic_dialog_dialer"
+                android:title="Course Planning" />
+        </menu>
+    </item>
 
 </menu>

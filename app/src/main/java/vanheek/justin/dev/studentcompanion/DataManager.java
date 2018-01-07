@@ -13,6 +13,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import vanheek.justin.dev.studentcompanion.objects.Checklist;
 import vanheek.justin.dev.studentcompanion.objects.Semester;
 
 /**
@@ -32,6 +33,7 @@ public class DataManager {
 
             oos.writeObject(act.semesters);
             oos.writeInt(act.currentSemester);
+            oos.writeObject(act.checklists);
 
             oos.close();
             Log.d("DataManager", "Save Successful");
@@ -54,6 +56,7 @@ public class DataManager {
             try {
                 act.semesters = (ArrayList<Semester>) ois.readObject();
                 act.currentSemester = ois.readInt();
+                act.checklists = (ArrayList<Checklist>) ois.readObject();
                 Log.d("DataManager", "Load Successful");
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();

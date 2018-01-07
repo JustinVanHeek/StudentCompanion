@@ -23,6 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import vanheek.justin.dev.studentcompanion.objects.Assignment;
+import vanheek.justin.dev.studentcompanion.objects.Checklist;
 import vanheek.justin.dev.studentcompanion.objects.Course;
 import vanheek.justin.dev.studentcompanion.objects.Exam;
 import vanheek.justin.dev.studentcompanion.objects.Milestone;
@@ -32,8 +33,11 @@ import vanheek.justin.dev.studentcompanion.objects.WeeklySchedule;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    //Data
     public ArrayList<Semester> semesters = new ArrayList<Semester>();
     public int currentSemester;
+    public ArrayList<Checklist> checklists = new ArrayList<>();
+
     public ColorPicker cp;
 
     @Override
@@ -120,6 +124,8 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.content_frame, new HomeFragment()).commit();
         } else if (id == R.id.nav_grade_pred_layout) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new GradePredictionFragment()).commit();
+        } else if (id == R.id.nav_checklist_layout) {
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new ProgramChecklistFragment()).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
