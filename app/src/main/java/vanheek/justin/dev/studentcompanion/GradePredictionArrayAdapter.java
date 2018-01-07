@@ -53,19 +53,31 @@ public class GradePredictionArrayAdapter extends ArrayAdapter<Course> {
         double currentPoints = 0;
         double totalPoints = 0;
         for(Assignment a : course.getAssignments()) {
-            earned = earned + a.getGrade()*a.getPercentOfGrade()/100;
-            lost = lost + (100-a.getGrade())*a.getPercentOfGrade()/100;
-            currentPoints = currentPoints + a.getGrade()*a.getPercentOfGrade()/100;
-            totalPoints = totalPoints + a.getPercentOfGrade();
+            if(a.getGrade() > 0) {
+                earned = earned + a.getGrade() * a.getPercentOfGrade() / 100;
+                lost = lost + (100 - a.getGrade()) * a.getPercentOfGrade() / 100;
+                currentPoints = currentPoints + a.getGrade() * a.getPercentOfGrade() / 100;
+                totalPoints = totalPoints + a.getPercentOfGrade();
+            }
         }
         for(Exam e : course.getExams()) {
-            earned = earned + e.getGrade()*e.getPercentOfGrade()/100;
-            lost = lost + (100-e.getGrade())*e.getPercentOfGrade()/100;
-            currentPoints = currentPoints + e.getGrade()*e.getPercentOfGrade()/100;
-            totalPoints = totalPoints + e.getPercentOfGrade();
+            if(e.getGrade() > 0) {
+                earned = earned + e.getGrade() * e.getPercentOfGrade() / 100;
+                lost = lost + (100 - e.getGrade()) * e.getPercentOfGrade() / 100;
+                currentPoints = currentPoints + e.getGrade() * e.getPercentOfGrade() / 100;
+                totalPoints = totalPoints + e.getPercentOfGrade();
+            }
         }
 
-        final double predictedGrade = currentPoints/totalPoints*100;
+        double prediction = currentPoints/totalPoints*100;
+        if(prediction < earned) {
+            prediction = earned;
+        }
+        if((100-lost) < earned) {
+            lost = 100-earned;
+        }
+
+        final double predictedGrade = prediction;
 
         //Display results in textual form
         if(totalPoints > 0) {

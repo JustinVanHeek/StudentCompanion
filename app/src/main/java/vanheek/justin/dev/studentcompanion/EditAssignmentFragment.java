@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -185,6 +186,7 @@ public class EditAssignmentFragment extends Fragment {
         }
         catch (NumberFormatException e){
             assignment.setGrade(-1);
+            Log.d("EditAssign","No grade entered");
         }
         assignment.setNotes(((EditText) myView.findViewById(R.id.editNotes)).getText().toString());
 
