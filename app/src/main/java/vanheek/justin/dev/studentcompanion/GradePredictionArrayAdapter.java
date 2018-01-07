@@ -45,6 +45,7 @@ public class GradePredictionArrayAdapter extends ArrayAdapter<Course> {
 
         //Set name
         ((TextView)rowView.findViewById(R.id.gradeCourse)).setText(course.getName());
+        rowView.setBackgroundColor(course.getColor());
 
         //Do calculations
         double earned = 0;
@@ -63,12 +64,18 @@ public class GradePredictionArrayAdapter extends ArrayAdapter<Course> {
             currentPoints = currentPoints + e.getGrade()*e.getPercentOfGrade()/100;
             totalPoints = totalPoints + e.getPercentOfGrade();
         }
+
         final double predictedGrade = currentPoints/totalPoints*100;
 
         //Display results in textual form
-        ((TextView)rowView.findViewById(R.id.gradePredictionText)).setText("Predicted Grade: " + predictedGrade + "%");
-        ((TextView)rowView.findViewById(R.id.gradeEarnedText)).setText("Minimum Possible Grade: " + earned + "%");
-        ((TextView)rowView.findViewById(R.id.gradeLostText)).setText("Maximum Possible Grade " + (100-lost) + "%" );
+        if(totalPoints > 0) {
+            ((TextView) rowView.findViewById(R.id.gradePredictionText)).setText("Predicted Grade: " + String.format("%.2f", predictedGrade) + "%");
+        }
+        else {
+            ((TextView) rowView.findViewById(R.id.gradePredictionText)).setText("Predicted Grade: --%");
+        }
+        ((TextView)rowView.findViewById(R.id.gradeEarnedText)).setText("Minimum Possible Grade: " + String.format("%.2f",earned) + "%");
+        ((TextView)rowView.findViewById(R.id.gradeLostText)).setText("Maximum Possible Grade: " + String.format("%.2f",(100-lost)) + "%" );
 
         //Display results in visual form
         final double finalLost = lost;
