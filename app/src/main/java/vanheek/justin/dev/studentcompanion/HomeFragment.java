@@ -111,12 +111,15 @@ public class HomeFragment extends Fragment {
 
     private void createNextWeeksLists() {
         Calendar todayStart = Calendar.getInstance();
-        todayStart.set(Calendar.HOUR_OF_DAY, 0);
         todayStart.add(Calendar.DAY_OF_YEAR,2);
+        todayStart.set(Calendar.HOUR_OF_DAY, 0);
+        Log.d("Home","HOUR"+todayStart.get(Calendar.HOUR_OF_DAY));
+        Log.d("Home","HOUR"+todayStart.get(Calendar.HOUR));
+
         Calendar todayEnd = Calendar.getInstance();
         todayEnd.set(Calendar.HOUR_OF_DAY,22);
         todayEnd.add(Calendar.DAY_OF_YEAR,7);
-        Log.d("Home","Getting today's courses...");
+        Log.d("Home","Getting week's courses...");
 
         Course[] courses = getCoursesWithDate(todayStart,todayEnd);
         Assignment[] assignments = getAssignmentWithDate(todayStart,todayEnd);
@@ -146,16 +149,17 @@ public class HomeFragment extends Fragment {
         ArrayList<Course> allCourses = new ArrayList<Course>();
         Calendar tempCal = Calendar.getInstance();
         tempCal.set(start.get(Calendar.YEAR),start.get(Calendar.MONTH),start.get(Calendar.DAY_OF_MONTH));
+        tempCal.set(Calendar.HOUR_OF_DAY,0);
         Log.d("Home", "Check " + tempCal.compareTo(end));
         while(tempCal.compareTo(end) <= 0) {
             for (Course c : courses) {
-                Log.d("Home","Checking " + c.getName() + " for day " + tempCal.get(Calendar.DAY_OF_WEEK));
+                Log.d("Home","Checking " + c.getName() + " for day " + tempCal.get(Calendar.DAY_OF_WEEK) + " on hour " + tempCal.get(Calendar.HOUR_OF_DAY));
                 if(hasCourse(c,tempCal) && !allCourses.contains(c)) {
                     Log.d("Home", "Found " + c.getName());
                     allCourses.add(c);
                 }
             }
-            tempCal.add(Calendar.DAY_OF_YEAR,1);
+            tempCal.add(Calendar.HOUR_OF_DAY,1);
         }
         Course[] results = new Course[allCourses.size()];
         for(int i = 0; i < results.length; i++) {
@@ -166,6 +170,21 @@ public class HomeFragment extends Fragment {
     }
 
     private boolean hasCourse(Course c, Calendar day) {
+        if(hasCourseOnDay(c,day)) {
+            return hasCourseWithinHour(c,day);
+        }
+        else {
+            return false;
+        }
+    }
+
+    private boolean hasCourseWithinHour(Course c, Calendar day) {
+        int hour = c.getCourseHours().start/100;
+        int checkHour = day.get(Calendar.HOUR_OF_DAY);
+        return hour == checkHour;
+    }
+
+    private boolean hasCourseOnDay(Course c, Calendar day) {
         switch (day.get(Calendar.DAY_OF_WEEK)) {
             case 1: return c.getCourseHours().sun;
             case 2: return c.getCourseHours().mon;
