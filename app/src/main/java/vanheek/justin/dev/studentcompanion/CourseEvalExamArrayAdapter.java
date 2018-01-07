@@ -35,7 +35,7 @@ public class CourseEvalExamArrayAdapter extends ArrayAdapter<Exam>{
         Exam assignment = values[position];
 
         ((TextView) rowView.findViewById(R.id.assignmentName)).setText(assignment.getName());
-        ((TextView) rowView.findViewById(R.id.percentOfGrade)).setText(assignment.getGrade()+"%");
+        ((TextView) rowView.findViewById(R.id.mark)).setText(assignment.getGrade()+"%");
         ((TextView) rowView.findViewById(R.id.percentOfGrade)).setText(assignment.getPercentOfGrade()+"%");
 
         return rowView;
