@@ -53,7 +53,8 @@ public class GradePredictionFragment extends ListFragment implements AdapterView
     }
 
     private void generateList() {
-        GradePredictionArrayAdapter adapter = new GradePredictionArrayAdapter(getActivity(), ((MainActivity)getActivity()).semesters.get(((MainActivity)getActivity()).currentSemester).getCoursesAsArray());
+        courses = ((MainActivity)getActivity()).semesters.get(((MainActivity)getActivity()).currentSemester).getCoursesAsArray();
+        GradePredictionArrayAdapter adapter = new GradePredictionArrayAdapter(getActivity(), courses);
         adapter.notifyDataSetChanged();
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
